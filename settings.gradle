@@ -1,1 +1,2 @@
 include ':app', ':library1'
+include ':pdog-gradle'
