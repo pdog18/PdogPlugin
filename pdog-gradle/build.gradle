@@ -10,15 +10,16 @@ dependencies {
     compileOnly gradleApi()
 //    compileOnly localGroovy()
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.2.41"
+    implementation "com.android.tools.build:gradle:3.0.1"
 }
 
 group = 'com.pdog.plugin'
-version = '1.0.1'
+version = '0.0.6'
 
 uploadArchives {
     repositories {
         mavenDeployer {
-            repository(url: uri('../repo'))
+            repository(url: uri('../../repo'))
         }
     }
 }
