@@ -10,28 +10,41 @@ import groovy.util.XmlSlurper
 import org.gradle.api.DomainObjectSet
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import java.io.File
 import java.io.FileInputStream
 import java.io.InputStreamReader
 
 
 class MyPlugin : Plugin<Project> {
     override fun apply(project: Project) {
-        project.afterEvaluate {
-            println("------------------------")
-            println(project.name)
-            project.plugins.all {
-                when (it) {
-                    is AppPlugin -> {
-                        println("is AppPlugin")
-                        project.extensions.getByType(AppExtension::class.java).run {
-                            printManifest(project, applicationVariants)
+        project.afterEvaluate { it ->
+            when (it.plugins) {
+                is AppPlugin -> {
+                    it.extensions.getByType(AppExtension::class.java).run {
+                        println(" ${this.applicationVariants.size}  <--- size")
+                        this.applicationVariants.all {
+                            println(it.name)
                         }
                     }
                 }
+                else -> {
+                }
             }
-            println("------------------------")
         }
+//        project.afterEvaluate {
+//            println("------------------------")
+//            println(project.name)
+//            project.plugins.all {
+//                when (it) {
+//                    is AppPlugin -> {
+//                        println("is AppPlugin")
+//                        project.extensions.getByType(AppExtension::class.java).run {
+//                            printManifest(project, applicationVariants)
+//                        }
+//                    }
+//                }
+//            }
+//            println("------------------------")
+//        }
     }
 
     private fun printManifest(project: Project, variants: DomainObjectSet<ApplicationVariant>) {

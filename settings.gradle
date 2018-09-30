@@ -1,2 +1,2 @@
-include ':app'
+include ':app', ':buildSrc', ':merge-modules'
 include ':pdog-gradle'
