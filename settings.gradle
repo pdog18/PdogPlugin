@@ -1,2 +1,4 @@
+println("setting start")
 include ':app', ':buildSrc', ':merge-modules'
 include ':pdog-gradle'
+println("setting finish")

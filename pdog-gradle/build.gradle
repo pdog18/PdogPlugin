@@ -2,6 +2,7 @@ apply plugin: 'java-gradle-plugin'
 apply plugin: 'maven'
 apply plugin: 'kotlin'
 
+println("subproject config")
 
 sourceCompatibility = "1.7"
 targetCompatibility = "1.7"

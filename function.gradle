@@ -1,0 +1,7 @@
+println('function applyed')
+
+def getVersionNameAdvanced() {
+    defxmlFile = project.file("AndroidManifest.xml")
+    defrootManifest = new XmlSlurper().parse(xmlFile)
+    return rootManifest['@android:versionName']
+}
