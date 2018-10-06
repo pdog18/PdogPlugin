@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
-apply plugin: 'default-luanch-mode'
+apply plugin: 'default-screen-orientation'
 
 android {
     compileSdkVersion 27
