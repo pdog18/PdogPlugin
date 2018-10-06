@@ -3,6 +3,7 @@ package plugin.pdog
 import com.android.build.gradle.AppExtension
 import com.android.build.gradle.AppPlugin
 import groovy.util.slurpersupport.GPathResult
+import groovy.util.slurpersupport.Node
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 
@@ -22,14 +23,27 @@ class LookTasksPlugin implements Plugin<Project> {
         appExtension.applicationVariants.all {
             it.outputs.forEach {
                 println("${project.name}  ${it.name}  ${it.processManifest}")
-                def processManifestTaskInputs = it.processManifest.inputs
-                processManifestTaskInputs.files.forEach {
-                    if (it.name.endsWith(".xml")) {
-                        def xparser = new XmlSlurper()
-                        GPathResult androidManifest = xparser.parse(it)
-                        println(androidManifest.@package)
-                    }
-                }
+
+                println(it.processManifest)
+                it.processManifest
+//                def processManifestTaskInputs = it.processManifest.inputs
+//                processManifestTaskInputs.files.forEach {
+//                    if (it.name.endsWith(".xml")) {
+//                        def xparser = new XmlSlurper()
+//                        GPathResult androidManifest = xparser.parse(it)
+//                        def packageName = androidManifest.@package
+//                        def activities = androidManifest.application.activity
+//
+//                        println(activities.length)
+//                        activities.each {
+//                            println(it instanceof Object)
+//                            println(it == null)
+//                            println(it.class)
+//                            println(it.name.class)
+//                            println(it.@'android:name')
+//                        }
+//                    }
+//                }
             }
         }
     }

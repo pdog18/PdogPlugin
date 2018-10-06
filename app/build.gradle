@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
-apply plugin: 'look-tasks'
+apply plugin: 'look-tasks-kotlin'
 
 android {
     compileSdkVersion 27
