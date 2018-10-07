@@ -10,7 +10,7 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 import java.io.*
 
-class DefaultScreenOrientation : Plugin<Project> {
+class DefaultAttributes : Plugin<Project> {
     override fun apply(project: Project) {
         project.plugins.all {
             if (it !is AppPlugin) {
@@ -46,7 +46,6 @@ class DefaultScreenOrientation : Plugin<Project> {
         throw NullPointerException("can't find AndroidManifest.xml")
     }
 
-
     private fun updateManifest(androidManifestFile: File, activityAttributes: ActivityAttributes) {
         val fileReader = FileReader(androidManifestFile)
         val androidManifestXmlNode = fileReader.use {
@@ -61,19 +60,20 @@ class DefaultScreenOrientation : Plugin<Project> {
             XmlNodePrinter(pw).print(androidManifestXmlNode)
         }
 
-        //todo update other component
+        //todo  1⃣️ update other component
     }
 
-
     private fun updateActivity(androidManifest: Node, activityAttributes: ActivityAttributes) {
-        val screenOrientationValue = activityAttributes.screenOrientation
-        if (screenOrientationValue != null) {
-            updateComponent(androidManifest,
-                    "activity",
-                    "screenOrientation", screenOrientationValue)
+
+
+        activityAttributes.getAllAttributes().forEach { key, value ->
+            // todo  2⃣️ value 校验
+            if (value != null) {
+                updateComponent(androidManifest, "activity", key, value)
+            }
         }
 
-        //todo update other component attributes
+        //todo  3⃣️ update other component attributes
     }
 
     private fun updateComponent(androidManifest: Node, componentName: String, key: String, value: String) {

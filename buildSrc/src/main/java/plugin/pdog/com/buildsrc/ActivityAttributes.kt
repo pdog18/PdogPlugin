@@ -6,4 +6,10 @@ open class ActivityAttributes {
     var windowSoftInputMode: String? = null
     var configChanges: String? = null
 //    val theme: String? = null
+
+    fun getAllAttributes() = mapOf(
+            "screenOrientation" to screenOrientation,
+            "launchMode" to launchMode,
+            "windowSoftInputMode" to windowSoftInputMode,
+            "configChanges" to configChanges)
 }
