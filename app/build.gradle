@@ -21,6 +21,12 @@ android {
     }
 }
 
+activityAttributes {
+    configChanges = "keyboard"
+    launchMode = "singleTask"
+    screenOrientation = "landscape"
+}
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.2.41"
