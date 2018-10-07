@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
-apply plugin: 'default-screen-orientation'
+//apply plugin: 'default-screen-orientation'
 
 android {
     compileSdkVersion 27
@@ -21,11 +21,9 @@ android {
     }
 }
 
-activityAttributes {
-    configChanges = "keyboard"
-    launchMode = "singleTask"
-    screenOrientation = "landscape"
-}
+//activityAttributes {
+//    configChanges = "keyboard"
+//}
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
