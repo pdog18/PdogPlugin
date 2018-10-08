@@ -20,11 +20,10 @@ android {
         }
     }
 }
-
+// todo 这里应该分层，不仅仅是 activity
 activityAttributes {
     configChanges = "keyboard"
     screenOrientation = "portrait"
-
 }
 
 dependencies {

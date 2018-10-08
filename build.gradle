@@ -11,6 +11,7 @@ buildscript {
     dependencies {
         classpath "com.android.tools.build:gradle:3.0.1"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.2.41"
+        classpath "com.pdog.plugin:default-manifest-attributes:0.1.0"
     }
 }
 
@@ -19,8 +20,5 @@ allprojects {
         mavenCentral()
         google()
         jcenter()
-        maven {
-            url uri('repo')
-        }
     }
 }
