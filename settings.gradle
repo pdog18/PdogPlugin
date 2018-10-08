@@ -1,2 +1,2 @@
-include ':app', ':merge-modules'
+include ':sample', ':merge-modules'
 include ':default-manifest-attributes'
