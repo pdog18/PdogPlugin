@@ -29,7 +29,7 @@ Gradle Plugin's Repository
     }
 ```
 
-输出的`AndroidManifest.xml` 对比
+输出的`AndroidManifest.xml` 对比, 留意两个文件中的 `android:screenOrientation="portrait"` 
 
 ```xml
 <!--默认的输出-->
@@ -43,7 +43,6 @@ Gradle Plugin's Repository
     <activity android:name="com.pdog18.plugin.ScreenOrientationOnKotlinCodeActivity" />
     <activity android:name="com.pdog18.plugin.ScreenOrientationOnManifestActivity" android:screenOrientation="portrait"/>
   </application>
-
 ```
 
 ```xml
