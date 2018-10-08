@@ -2,7 +2,7 @@
 Gradle Plugin's Repository
 
 ## merge-modules
-组件化用于依赖rootProject下的所有subProject使用的plugin，配合DSL 使用
+组件化用于依赖 rootProject 下的所有 subProject 使用的 plugin ，配合DSL 使用
 
 
 ## default-manifest-attributes
