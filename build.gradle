@@ -9,8 +9,8 @@ buildscript {
     }
 
     dependencies {
-        classpath "com.android.tools.build:gradle:3.0.1"
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.2.41"
+        classpath Deps.android_gradle_plugin
+        classpath Deps.kotlin_gradle_plugin
         /**
          * 第一次 clone 项目后, repo 没有找到，那么
          * 1. 注释「classpath "com.pdog.plugin:default-manifest-attributes:0.1.0"」

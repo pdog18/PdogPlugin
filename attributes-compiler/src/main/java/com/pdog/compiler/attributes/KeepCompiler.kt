@@ -1,11 +1,8 @@
 package com.pdog.compiler.attributes
 
 import com.pdog.attributes.KeepAttributes
-import java.awt.DisplayMode
 
 import java.io.File
-import java.io.FileWriter
-import java.io.IOException
 import java.util.concurrent.atomic.AtomicBoolean
 
 import javax.annotation.processing.AbstractProcessor
@@ -42,6 +39,10 @@ class KeepCompiler : AbstractProcessor() {
             log("once!!")
             val rootProject = File("").absoluteFile
             val build = File(rootProject, "build/keep-build.txt")
+            log(build.absolutePath)
+            if (build.exists()) {
+                build.delete()
+            }
             build.createNewFile()
 
             roundEnvironment.rootElements

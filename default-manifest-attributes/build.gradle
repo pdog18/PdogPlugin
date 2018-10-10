@@ -5,8 +5,9 @@ apply plugin: 'kotlin'
 dependencies {
     compileOnly gradleApi()
     compileOnly localGroovy()
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.2.41"
-    implementation 'com.android.tools.build:gradle:3.0.1'
+    implementation Deps.android_gradle_plugin
+    implementation Deps.kotlin_stdlib
+
 }
 
 group = 'com.pdog.plugin'
