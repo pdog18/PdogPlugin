@@ -1,9 +1,8 @@
 package com.pdog18.plugin
 
-import com.pdog.attributes.KeepAttributes
 import kotlinx.android.synthetic.main.activity_base.*
 
-class EmptyScreenOrientationActivity : BaseActivity() {
+class EmptyScreenOrientationActivity : SecondActivity() {
 
     override fun doLast() {
         super.doLast()
