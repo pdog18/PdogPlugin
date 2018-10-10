@@ -1,11 +1,8 @@
 
-Gradle Plugin's Repository
-
-## merge-modules
-组件化用于依赖 rootProject 下的所有 subProject 使用的 plugin ，配合DSL 使用
-
-
 ## default-manifest-attributes
+
+> [建立此Plugin原因](https://juejin.im/post/5bbac689e51d450e5c47991a)
+
 
 通过`HOOK` `android-gradle-plugin` 的 `processManifest`在该`Task` 的`doLast` 中通过修改`AndroidManifest.xml` 文件，来为项目中的所有组件设置默认属性。
 
