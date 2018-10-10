@@ -1,2 +1,1 @@
-include ':sample', ':merge-modules', ':attributes-annotations', ':attributes-compiler'
-include ':default-manifest-attributes'
+include ':sample'
