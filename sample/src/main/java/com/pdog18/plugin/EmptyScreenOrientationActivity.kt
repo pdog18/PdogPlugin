@@ -3,7 +3,6 @@ package com.pdog18.plugin
 import com.pdog.attributes.KeepAttributes
 import kotlinx.android.synthetic.main.activity_base.*
 
-@KeepAttributes("aaa")
 class EmptyScreenOrientationActivity : BaseActivity() {
 
     override fun doLast() {
