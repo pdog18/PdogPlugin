@@ -1,8 +1,10 @@
 package com.pdog18.plugin
 
 import android.content.pm.ActivityInfo
+import com.pdog.attributes.KeepAttributes
 import kotlinx.android.synthetic.main.activity_base.*
 
+@KeepAttributes(configChanges = "keyboardHidden")
 class ScreenOrientationOnKotlinCodeActivity : BaseActivity() {
 
     override fun doFirst() {
