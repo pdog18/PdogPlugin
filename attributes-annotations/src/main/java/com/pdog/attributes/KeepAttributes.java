@@ -10,5 +10,5 @@ import java.lang.annotation.Target;
 @Inherited
 @Target(ElementType.TYPE)
 public @interface KeepAttributes {
-    String value();
+    String configChanges() default "";
 }
