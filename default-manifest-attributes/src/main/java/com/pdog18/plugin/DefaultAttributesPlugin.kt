@@ -23,12 +23,20 @@ class DefaultAttributes : Plugin<Project> {
             project.extensions.getByType(AppExtension::class.java).run {
                 this.applicationVariants.all { variant ->
                     variant.outputs.forEach {
+                        val variantOutputs = it
 
-                        it.processManifest.run {
-                            this.doLast {
-                                val file = findManifest(this.manifestOutputDirectory)
-                                updateManifest(file, activityAttributes)
+                        it.assemble.doLast {
+                            println("assemble")
+
+                            val file = findManifest(variantOutputs.processManifest.manifestOutputDirectory)
+                            val keepFile = File(project.buildDir, "keep-build.txt")
+                            if (keepFile.exists()) {
+                                println("read in plugin ${keepFile.readText()}")
+                            } else {
+                                println("keepFile not exists!")
                             }
+
+                            updateManifest(file, activityAttributes)
                         }
                     }
                 }
@@ -52,6 +60,7 @@ class DefaultAttributes : Plugin<Project> {
             XmlParser().parse(fileReader)
         }
 
+
         updateActivity(androidManifestXmlNode, activityAttributes)
 
         // Write the manifest file
@@ -64,7 +73,6 @@ class DefaultAttributes : Plugin<Project> {
     }
 
     private fun updateActivity(androidManifest: Node, activityAttributes: ActivityAttributes) {
-
 
         activityAttributes.getAllAttributes().forEach { key, value ->
             // todo  2⃣️ value 校验
