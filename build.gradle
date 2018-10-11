@@ -18,7 +18,7 @@ buildscript {
          * 3. 确定「rootProject」 层生成了 repo 仓库，并且 plugin 上传成功
          * 4. 取消注释 使项目依赖 plugin
          */
-        classpath "com.pdog.plugin:default-manifest-attributes:0.1.0"
+        classpath "com.pdog.plugin:default-manifest-attributes:0.1.4"
     }
 }
 
