@@ -18,15 +18,34 @@ import kotlin.reflect.KClass
 
 class KeepCompiler : AbstractProcessor() {
 
-    private var filer: Filer? = null
+    private lateinit var filer: Filer
+    private lateinit var options: Map<String, String>
     private lateinit var messager: Messager
     private val once = AtomicBoolean()
+
+    private lateinit var buildDir: File
 
     @Synchronized
     override fun init(processingEnvironment: ProcessingEnvironment) {
         super.init(processingEnvironment)
         filer = processingEnvironment.filer
         messager = processingEnvironment.messager
+        options = processingEnvironment.options
+
+        val buildDirPath = options["buildDir"]
+        if (buildDirPath == null) {
+            log("""
+请确保你在对应的project中的build.gradle中设置了
+kapt {
+    arguments {
+        arg("buildDir", project.buildDir)
+    }
+}
+""".trim(), Diagnostic.Kind.ERROR)
+            throw NullPointerException()
+        } else {
+            buildDir = File(options["buildDir"], "keep-build.txt")
+        }
     }
 
     /**
@@ -37,20 +56,22 @@ class KeepCompiler : AbstractProcessor() {
 
         if (once.compareAndSet(false, true)) {
             log("once!!")
-            val rootProject = File("").absoluteFile
-            val build = File(rootProject, "build/keep-build.txt")
-            log(build.absolutePath)
-            if (build.exists()) {
-                build.delete()
+
+            log(buildDir.absolutePath)
+            if (buildDir.exists()) {
+                buildDir.delete()
             }
-            build.createNewFile()
+            buildDir.createNewFile()
 
             roundEnvironment.rootElements
                     .filter { it[KeepAttributes::class] != null }
-                    .map { getTargetClassName(it) to it[KeepAttributes::class].value }
+                    .map {
+                        log("configChanges = ${it[KeepAttributes::class].configChanges}")
+                        getTargetClassName(it) to it[KeepAttributes::class].configChanges
+                    }
                     .toList()
                     .forEach {
-                        build.appendText("${it.first}: ${it.second}\r\n")
+                        buildDir.appendText("${it.first}: ${it.second}\r\n")
                         log("${it.first}:  ${it.second}")
                     }
         }
@@ -80,6 +101,5 @@ class KeepCompiler : AbstractProcessor() {
 
     private inline operator fun <reified T : Annotation> Element.get(annotationType: KClass<T>) =
             getAnnotation(annotationType.java)
-
 
 }
