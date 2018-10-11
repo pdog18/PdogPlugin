@@ -14,7 +14,6 @@ import javax.lang.model.SourceVersion
 import javax.lang.model.element.Element
 import javax.lang.model.element.TypeElement
 import javax.tools.Diagnostic
-import kotlin.reflect.KClass
 
 class KeepCompiler : AbstractProcessor() {
 
@@ -65,12 +64,12 @@ kapt {
 
             roundEnvironment.rootElements
                     .filter { it[KeepAttributes::class] != null }
-                    .map {
-                        log("configChanges = ${it[KeepAttributes::class].configChanges}")
-                        getTargetClassName(it) to it[KeepAttributes::class].configChanges
-                    }
+                    .map { getTargetClassName(it) to it.indexAnnotation(KeepAttributes::class) }
                     .toList()
                     .forEach {
+                        it.second.map { "${it.key}=${it.value}&" }
+                        TODO()
+
                         buildDir.appendText("${it.first}: ${it.second}\r\n")
                         log("${it.first}:  ${it.second}")
                     }
@@ -99,7 +98,5 @@ kapt {
         return "${element.enclosingElement}.${element.simpleName}"
     }
 
-    private inline operator fun <reified T : Annotation> Element.get(annotationType: KClass<T>) =
-            getAnnotation(annotationType.java)
 
 }
