@@ -8,8 +8,5 @@ class EmptyScreenOrientationActivity : BaseActivity() {
         super.doLast()
 
         background.setImageResource(R.mipmap.empty)
-        btn_next.setOnClickListener {
-            startActivity<ScreenOrientationOnManifestActivity>()
-        }
     }
 }
