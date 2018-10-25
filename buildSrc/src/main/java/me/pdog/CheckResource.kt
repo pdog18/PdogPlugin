@@ -13,7 +13,7 @@ class CheckResource : Plugin<Project> {
     private var allProject: MutableList<File> = mutableListOf()
 
     override fun apply(project: Project) {
-        project.plugins.all {
+        project.plugins.all { it ->
             if (it !is AppPlugin) {
                 return@all
             }
@@ -24,8 +24,7 @@ class CheckResource : Plugin<Project> {
 
             project.extensions.getByType(AppExtension::class.java).run {
                 this.applicationVariants.all { variant ->
-                    variant.mergeResources.doLast {
-
+                    variant.mergeResources.doLast { it ->
                         it.inputs.files.forEach {
                             if (isModuleResourceFile(it)) {
                                 collectionFile(it, resourceNameMap, throwableMap)
@@ -56,6 +55,12 @@ class CheckResource : Plugin<Project> {
     }
 
 
+    /**
+     * 这里不应该把整个 project 中的所有文件一次性灌进去
+     *
+     * 1. 将每个 inputFile 收集一次，这样可以过滤掉同项目中的不同限定的内容
+     * 2. 从第一步中获得若干个集合，然后在使用这些集合比对，是否有相同的文件
+     */
     private fun collectionFile(file: File, resourceNameMap: HashMap<String, File>, throwableMap: HashMap<String, MutableList<File>>) {
         if (file.isDirectory) {
             file.listFiles().forEach {
@@ -64,6 +69,7 @@ class CheckResource : Plugin<Project> {
         } else {
             val newFile = file
             val fileName = file.name
+
 
             // todo  屏蔽同项目中的内容
             val oldFile = resourceNameMap.put(fileName, file)
