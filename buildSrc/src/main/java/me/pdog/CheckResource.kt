@@ -2,90 +2,79 @@ package me.pdog
 
 import com.android.build.gradle.AppExtension
 import com.android.build.gradle.AppPlugin
+import com.android.build.gradle.LibraryPlugin
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import java.io.File
 
 class CheckResource : Plugin<Project> {
 
-    private var resourceNameMap: HashMap<String, File> = hashMapOf()
-    private var throwableMap: HashMap<String, MutableList<File>> = hashMapOf()
-    private var allProject: MutableList<File> = mutableListOf()
+    private val allMap = mutableListOf<Map<String, File>>()
+
+    private val gradleCachePath = "/Users/pdog/.gradle/caches/"
+
+
+    private fun onApply(project: Project) {
+        project.extensions.getByType(AppExtension::class.java).run {
+            this.applicationVariants.all { variant ->
+
+                val task = project.tasks.findByName("merge${variant.name.capitalize()}Resources")
+                task?.doFirst { it ->
+                    it.inputs.files.forEach {
+                        // 为每个 inputs 找到 对应的 File Set , 然后添加到 inputs 中
+                        val map = findResourceMap(it)
+                        allMap.add(map)
+                    }
+
+                    checkResourceByAllMap(allMap)
+                }
+            }
+        }
+    }
 
     override fun apply(project: Project) {
-        project.plugins.all { it ->
-            if (it !is AppPlugin) {
-                return@all
+        project.plugins.all {
+            when (it) {
+                is AppPlugin -> onApply(project)
+                is LibraryPlugin -> onApply(project)
             }
+        }
+    }
 
-            project.rootProject.subprojects.forEach {
-                allProject.add(it.projectDir)
-            }
-
-            project.extensions.getByType(AppExtension::class.java).run {
-                this.applicationVariants.all { variant ->
-                    variant.mergeResources.doLast { it ->
-                        it.inputs.files.forEach {
-                            if (isModuleResourceFile(it)) {
-                                collectionFile(it, resourceNameMap, throwableMap)
-                            }
-                        }
-
-                        println(resourceNameMap.size)
-                        println(throwableMap.size)
-
-                        throwableMap.forEach {
-                            println("${it.key}  ->  ${it.value.map { it.absolutePath }.reduce { acc, s -> "$acc\n$s" }}")
-                        }
-                        project.buildDir
-                    }
+    private fun checkResourceByAllMap(allSet: MutableList<Map<String, File>>) {
+        val map = mutableMapOf<String, File>()
+        allSet.forEach {
+            it.forEach { name, newFile ->
+                val oldFile = map.put(name, newFile)
+                if (oldFile != null) {  // ops~! 发现相同的文件了
+                    throw Exception("两个module 中有文件相同了！\n ${oldFile.absolutePath} \n ${newFile.absolutePath}")
                 }
             }
         }
     }
 
-    private fun isModuleResourceFile(file: File): Boolean {
-        allProject.forEach {
-            if (file.absolutePath.startsWith(it.absolutePath)) {
-                println("module file  -> ${it.absolutePath}")
-                return true
-            }
+    private fun findResourceMap(file: File?): Map<String, File> {
+        val map = mutableMapOf<String, File>()
+        // todo 这里应该通过 project 中的 res 路径来判断，另外如果有自定的res的话 ，那更加复杂
+        if (file == null || file.absolutePath.startsWith(gradleCachePath, true)) {
+            return map
+        } else {
+            collectionFileToMap(file, map)
         }
-        return false
+
+        return map
     }
 
-
-    /**
-     * 这里不应该把整个 project 中的所有文件一次性灌进去
-     *
-     * 1. 将每个 inputFile 收集一次，这样可以过滤掉同项目中的不同限定的内容
-     * 2. 从第一步中获得若干个集合，然后在使用这些集合比对，是否有相同的文件
-     */
-    private fun collectionFile(file: File, resourceNameMap: HashMap<String, File>, throwableMap: HashMap<String, MutableList<File>>) {
+    private fun collectionFileToMap(file: File?, map: MutableMap<String, File>) {
+        if (file == null) {
+            return
+        }
         if (file.isDirectory) {
-            file.listFiles().forEach {
-                collectionFile(it, resourceNameMap, throwableMap)
+            file.listFiles().forEach { it ->
+                collectionFileToMap(it, map)
             }
         } else {
-            val newFile = file
-            val fileName = file.name
-
-
-            // todo  屏蔽同项目中的内容
-            val oldFile = resourceNameMap.put(fileName, file)
-            // 如果文件已经存在，那么将会记录异常，等待抛出
-            oldFile?.let {
-                val newList = mutableListOf<File>()
-                val list = throwableMap[fileName]
-
-                list?.let {
-                    newList.addAll(it)
-                }
-
-                newList.add(newFile)
-
-                throwableMap[fileName] = newList
-            }
+            map[file.name] = file
         }
     }
 }
