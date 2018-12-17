@@ -1,21 +1,63 @@
-apply plugin: 'groovy'
-//apply plugin: 'maven'
-apply plugin: 'com.github.dcendents.android-maven'
-
+plugins {
+    id 'java-gradle-plugin'
+    id 'groovy'
+    id 'maven'
+    id 'maven-publish'
+}
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation gradleApi()
     implementation localGroovy()
 }
-//
-//group = 'com.pdog.gradle.plugin'
-//version = '0.9.0'
-//
-//uploadArchives {
-//    repositories {
-//        mavenDeployer {
-//            repository(url: uri(rootProject.file("repo")))
-//        }
-//    }
-//}
+
+group = 'com.pdog.gradle.plugin'
+version = '0.9.91'
+
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            //为Pom文件做数字签名
+//            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+            //指定项目部署到的中央库地址，UserName和Password就是Part 1中注册的账号。
+            repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+                authentication(userName: userName, password: password)
+            }
+            snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+                authentication(userName: userName, password: password)
+            }
+
+            //构造项目的Pom文件，参见Part 2中Pom文件的规范，不要遗漏必填项
+            pom.project {
+                name project.name
+//                packaging 'aar'
+                description 'current-application-util'
+                url 'https://github.com/pdog18/current-application-util'
+
+                scm {
+                    url 'scm:git@github.com/pdog18/current-application-util.git'
+                    connection 'scm:git@github.com/pdog18/current-application-util.git'
+                    developerConnection 'git@github.com/pdog18/current-application-util.git'
+                }
+
+                licenses {
+                    license {
+                        name 'The Apache Software License, Version 2.0'
+                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                        distribution 'pdog18'
+                    }
+                }
+
+                developers {
+                    developer {
+                        id 'util'
+                        name 'pdog'
+                        email 'pdogj18@gmail.com'
+                    }
+                }
+            }
+        }
+    }
+}
