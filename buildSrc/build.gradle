@@ -3,7 +3,7 @@ apply plugin: 'kotlin'
 apply plugin: 'groovy'
 
 buildscript {
-    ext.kotlin_version = '1.2.41'
+    ext.kotlin_version = '1.3.41'
     repositories {
         mavenCentral()
     }
@@ -22,5 +22,5 @@ dependencies {
     compileOnly gradleApi()
     compileOnly localGroovy()
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    implementation 'com.android.tools.build:gradle:3.2.1'
+    implementation 'com.android.tools.build:gradle:3.3.0'
 }
